@@ -1,0 +1,4 @@
+web_user:
+    resource: "@WebUserBundle/Resources/config/routing.yml"
+    prefix:   /
+
