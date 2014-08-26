@@ -1,0 +1,35 @@
+{% extends'::Base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        {% trans_default_domain 'FOSUserBundle' %}
+
+        {% if error %}
+            <div class="alert alert-danger">
+                {{ error|trans }}
+            </div>
+        {% endif %}
+
+        <form action="{{ path("fos_user_security_check") }}" method="post" class="form-signin">
+            <h2 class="form-signin-heading">Logowanie</h2>
+
+            <input type="text" id="username" name="_username" value="{{ last_username }}" required="required"
+                   class="form-control" placeholder="Nazwa użytkownika" autofocus/>
+
+            <input type="password" id="password" name="_password" required="required" class="form-control"
+                   placeholder="Hasło"/>
+
+            <label class="checkbox" for="remember_me">
+                <input type="checkbox" id="remember_me" name="_remember_me" value="on"/> Zapamiętaj mnie
+            </label>
+
+            <input type="submit" id="_submit" name="_submit" class="btn btn-lg btn-primary btn-block" value="Zaloguj"/>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
+        </form>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent()}}
+    <link href="{{ asset('css/login.css') }}" rel="stylesheet" type="text/css">
+{% endblock %}

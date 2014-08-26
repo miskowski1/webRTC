@@ -1,0 +1,23 @@
+Web\Bundle\UserBundle\Entity\User:
+    type: entity
+    table: users
+    repositoryClass: Web\Bundle\UserBundle\Repository\UserRepository
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        last_activity:
+            type: datetime
+            nullable: true
+    oneToMany:
+        rooms:
+            targetEntity: Room
+            mappedBy: owner
+            cascade: ["all"]
+    manyToMany:
+        invitations:
+            targetEntity: Room
+            mappedBy: users
+            cascade: ["all"]

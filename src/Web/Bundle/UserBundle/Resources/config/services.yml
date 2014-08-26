@@ -2,6 +2,8 @@ parameters:
 #    web_user.example.class: Web\Bundle\UserBundle\Example
 
 services:
-#    web_user.example:
-#        class: %web_user.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    activity_listener:
+        class: Web\Bundle\UserBundle\EventListener\ActivityListener
+        arguments: [@security.context, @doctrine.orm.entity_manager, %web_user.interval%]
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onController }

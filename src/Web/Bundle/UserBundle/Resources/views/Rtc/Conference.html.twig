@@ -1,0 +1,58 @@
+{% extends 'WebUserBundle::Layout.html.twig' %}
+
+{% block content %}
+    <div class="col-sm-8 blog-main">
+        <h2>Kutong</h2>
+
+        <div class="row">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active">
+                    <a data-toggle="tab" role="tab" href="#video">Video</a>
+                </li>
+                <li>
+                    <a data-toggle="tab" role="tab" href="#slide">Slide</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="video" class="tab-pane fade in active">
+                    <video id="main-video"></video>
+                    <a href="#" id="fullscreen"><span>Fullscreen</span></a>
+                </div>
+                <div id="slide" class="tab-pane fade">
+
+                </div>
+            </div>
+        </div>
+        <h4>Streams</h4>
+
+        <div class="cameras">
+            <ul>
+                <li class="ui-state-default">
+                    <video style="background: green"></video>
+                    <div class="info">Maciek z klanu</div>
+                </li>
+                <li class="ui-state-default">
+                    <video style="background: blue"></video>
+                    <div class="info">Miś uszatek</div>
+                </li>
+                <li class="ui-state-default">
+                    <video style="background: yellow"></video>
+                    <div class="info">Hatifnat</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+        <h4>Wiadomości</h4>
+    </div>
+
+    <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+        <h4>Pliki do pobrania</h4>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('js/video.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/custom.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'WebUserBundle::Layout.html.twig' %}
+
+{% block content %}
+    <div class="col-sm-6">
+        <h2>Moje pokoje</h2>
+        {% if rooms|length > 0 %}
+        <ul>
+        {% for room in rooms %}
+            <li><a href="{{ path('conference', {'id': room.id}) }}">{{ room.name }}</a></li>
+        {% endfor %}
+        </ul>
+        {% else %}
+        <div>Brak pokoiiiiiiii</div>
+        {% endif %}
+    </div>
+    <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+        <h2>Pokoje do których moge wejść</h2>
+        {% if invitations|length > 0 %}
+            <ul>
+                {% for room in invitations %}
+                    <li><a href="{{ path('conference', {'id': room.id}) }}">{{ room.name }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div>Brak pokoiiiiiiii</div>
+        {% endif %}
+    </div>
+{% endblock %}

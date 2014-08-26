@@ -1,66 +1,21 @@
+$(document).ready(function(){
+    var $cameras = $( ".cameras ul"),
+        $mainVideo = $('#main-video'),
+        onFullscreen = false;
+
+
+    $cameras.sortable();
+    $cameras.disableSelection();
+
+    $('.cameras li').live('click', function(){
+        $(this).siblings().removeClass('active');
+        $(this).addClass('active');
+    });
+
+    $mainVideo.rtcVideo();
+});
+
 /*
-$(document).ready(function() {
-
-    var my_video = document.querySelector(".video-myself");
-    var remote_video = document.querySelector(".video-caller");
-
-    var connection = new (window.RTCPeerConnection ||
-        window.mozRTCPeerConnection ||
-        window.webkitRTCPeerConnection
-    )();
-
-    var connection2 = new (window.RTCPeerConnection ||
-        window.mozRTCPeerConnection ||
-        window.webkitRTCPeerConnection
-        )();
-
-    var connectionDescription = (window.RTCSessionDescription ||
-        window.mozRTCSessionDescription ||
-        window.webkitRTCSessionDescription
-    );
-
-    navigator.getUserMedia = (navigator.getUserMedia ||
-        navigator.webkitGetUserMedia ||
-        navigator.mozGetUserMedia ||
-        navigator.oGetUserMedia ||
-        navigator.msieGetUserMedia
-    );
-
-    if (navigator.getUserMedia) {
-        navigator.getUserMedia (
-        {
-            video: true
-//            audio: true
-        },
-            function (localMediaStream) {
-                my_video.src = window.URL.createObjectURL(localMediaStream);
-                */
-/*connection.addStream(localMediaStream);
-                connection.createOffer(function(offer) {
-                    connection.setLocalDescription(offer);
-                    connection2.createAnswer(function(answer) {
-                        connection2.setRemoteDescription(offer);
-                    }, error);
-                }, error);
-                connection2.onaddstream(function(e) {
-                    remote_video.scr = window.URL.createObjectUrl(e.stream);
-                });*//*
-
-            },
-
-            function(e) {
-                alert(e);
-            }
-        );
-    } else {
-        alert('UserMedia not supported');
-    }
-
-    function error(err) {
-        connection.close();
-    }
-});*/
-
 var mediaConstraints = {
     optional: [],
     mandatory: {
@@ -86,7 +41,9 @@ window.iceServers = {
     }]
 };
 
-/* offerer */
+*/
+/* offerer *//*
+
 
 function offererPeer(stream) {
     offerer = new RTCPeerConnection(window.iceServers);
@@ -109,7 +66,9 @@ offerer.createOffer(function (offer) {
 }
 
 
-/* answerer */
+*/
+/* answerer *//*
+
 
 function answererPeer(offer, stream) {
     answerer = new RTCPeerConnection(window.iceServers);
@@ -155,4 +114,4 @@ function onSdpError(e) {
 
 function onSdpSucces() {
     console.log('onSdpSucces');
-    }
+    }*/

@@ -1,3 +1,21 @@
-web_user_homepage:
-    path:     /
-    defaults: { _controller: WebUserBundle:Default:index }
+web_user_rooms:
+    prefix: /my-rooms
+    resource: "@WebUserBundle/Resources/config/routing/rooms.yml"
+
+web_user_users:
+    prefix: /users
+    resource: "@WebUserBundle/Resources/config/routing/user.yml"
+
+homepage:
+    path: /
+    defaults: { _controller: WebUserBundle:Rtc:rooms }
+
+rooms:
+    path: /rooms
+    defaults: { _controller: WebUserBundle:Rtc:rooms }
+
+conference:
+    path: /room-{id}
+    defaults: { _controller: WebUserBundle:Rtc:conference }
+    requirements:
+        id: \d+

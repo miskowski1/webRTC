@@ -1,0 +1,51 @@
+{% extends 'WebUserBundle::Layout.html.twig' %}
+
+{% block content %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-9">
+                    <h1>Lista moich pokoi</h1>
+                </div>
+                <div class="col-md-3">
+                    <a href="{{ path('admin_room_add') }}" class="btn btn-info pull-right">Utwórz pokój</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-body">
+            <table class="table table-stripped table-hover">
+                <thead>
+                    <tr>
+                        <th style="width:5%; text-align: center;">#</th>
+                        <th>Nazwa pokoju</th>
+                        <th>Liczba zaproszonych</th>
+                        <th>Aktywny Chat</th>
+                        <th>Aktywne załączniki</th>
+                        <th>Akcje</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for room in rooms %}
+                    <tr>
+                        <td>{{ room.id }}</td>
+                        <td>{{ room.name }}</td>
+                        <td>{{ room.getActiveChat?'<b>Tak</b>':'Nie' }}</td>
+                        <td>{{ room.getActiveFiles?'<b>Tak</b>':'Nie' }}</td>
+                        <td>{{ room.users|length }}</td>
+                        <td>
+                            <a href="{{ path('admin_room_edit', { 'id': room.id }) }}" title="Edycja">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </a>
+                            <a href="{{ path('admin_room_edit', { 'id': room.id }) }}" title="Edycja">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

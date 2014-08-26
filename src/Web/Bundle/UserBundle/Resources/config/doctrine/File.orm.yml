@@ -1,0 +1,25 @@
+Web\Bundle\UserBundle\Entity\File:
+    type: entity
+    table: files
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 255
+            nullable: false
+        physical:
+            type: string
+            length: 100
+            nullable: false
+            unique: true
+    manyToOne:
+        room:
+            targetEntity: Room
+            inversedBy: files
+            joinColumn:
+                name: room_id
+                referencedColumnName: id

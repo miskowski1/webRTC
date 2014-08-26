@@ -1,0 +1,45 @@
+Web\Bundle\UserBundle\Entity\Room:
+    type: entity
+    table: rooms
+    repositoryClass: Web\Bundle\UserBundle\Repository\RoomRepository
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 255
+            nullable: false
+        token:
+            type: string
+            length: 40
+        active_chat:
+            type: boolean
+        active_files:
+            type: boolean
+    oneToMany:
+        files:
+            targetEntity: File
+            mappedBy: room
+            cascade: ["all"]
+    manyToOne:
+        owner:
+            targetEntity: User
+            inversedBy: rooms
+            joinColumn:
+                name: owner_id
+                referencedColumnName: id
+    manyToMany:
+        users:
+            targetEntity: User
+            inversedBy: invitations
+            joinTable:
+                name: room_invitations
+                joinColumns:
+                    room_id:
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    user_id:
+                        referencedColumnName: id

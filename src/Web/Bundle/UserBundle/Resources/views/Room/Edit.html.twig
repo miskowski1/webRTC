@@ -1,0 +1,66 @@
+{% extends 'WebUserBundle::Layout.html.twig' %}
+
+
+{% block content %}
+{% form_theme roomForm '::form_row.html.twig' %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-header">
+            <h1>Zmień ustawienia pokoju</h1>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-7">
+        {{ form_start(roomForm, {'attr': {'class':'form-horizontal', 'novalidate' : 'novalidate'}} ) }}
+        {{ form_row(roomForm.name) }}
+        {{ form_row(roomForm.active_chat) }}
+        {{ form_row(roomForm.active_files) }}
+        <div class="form-group">
+            <div class="col-lg-offset-2 col-lg-10">
+                {{ form_widget(roomForm.save, { 'attr' : { 'class' : 'btn btn-primary' }} ) }}
+            </div>
+        </div>
+        {{ form_end(roomForm) }}
+    </div>
+    <div class="col-md-5">
+        <h4>Dodaj uczesnika</h4>
+        <div class="col-md-12">
+            {{ form_start(userForm, {'attr': {'class':'form-horizontal', 'novalidate' : 'novalidate'}} ) }}
+            <div class="form-group">
+                {{ form_widget(userForm.email, {'attr' : { 'class' : 'form-control pull-left', 'style' : 'width:80%'}}) }}
+                {{ form_widget(userForm.save, { 'attr' : { 'class' : 'pull-right btn btn-primary col-md-2' }} ) }}
+            </div>
+            {{ form_end(userForm) }}
+        </div>
+        <h4>Lista uczestników</h4>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-stripped table-hover">
+                    <thead>
+                    <tr>
+                        <th style="width:5%; text-align: center;">#</th>
+                        <th>Nazwa uczestnika</th>
+                        <th>Akcje</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.username }} ({{ user.email }})</td>
+                            <td>
+                                <a href="{{ path('admin_room_user_remove', {'room': form.vars.value.id, 'user': user.id}) }}">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

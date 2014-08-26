@@ -1,0 +1,11 @@
+admin_rooms:
+    path: /
+    defaults: { _controller: "WebUserBundle:Room:list" }
+
+admin_room_add:
+    path: /add
+    defaults: { _controller: "WebUserBundle:Room:add" }
+
+admin_room_edit:
+    path: /edit/{id}
+    defaults: { _controller: "WebUserBundle:Room:edit" }
