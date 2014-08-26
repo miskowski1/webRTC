@@ -2,11 +2,11 @@
 
 namespace Web\SocketBundle\Command;
 
+use Doctrine\ORM\EntityManager;
 use Ratchet\Http\HttpServer;
-use Ratchet\Http\OriginCheck;
 use Ratchet\Server\IoServer;
 use Ratchet\WebSocket\WsServer;
-use Web\SocketBundle\Handler\Conference;
+use Web\SocketBundle\Server\Conference;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,6 +17,20 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ServerCommand extends Command
 {
+    /**
+     * @var \Doctrine\ORM\EntityManager
+     */
+    private $manager;
+
+    /**
+     * @param EntityManager $em
+     */
+    public function __construct(EntityManager $em)
+    {
+        $this->manager = $em;
+        parent::__construct();
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -34,7 +48,7 @@ class ServerCommand extends Command
         $server = IoServer::factory(
             new HttpServer(
                 new WsServer(
-                    new Conference()
+                    new Conference($this->manager)
                 )
             ),
             8080

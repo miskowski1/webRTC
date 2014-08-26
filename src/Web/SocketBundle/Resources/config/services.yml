@@ -1,7 +1,9 @@
 parameters:
-#    web_socket.example.class: Web\SocketBundle\Example
+    web_socket.server.command.class: Web\SocketBundle\Command\ServerCommand
 
 services:
-#    web_socket.example:
-#        class: %web_socket.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    web_socket.server.command:
+        class: %web_socket.server.command.class%
+        arguments: [@doctrine.orm.entity_manager]
+        tags:
+            -  { name: console.command }
