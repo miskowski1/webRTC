@@ -32,6 +32,11 @@ class Conference implements MessageComponentInterface
     protected $manager;
 
     /**
+     * @var Dispatcher
+     */
+    protected $dispatcher;
+
+    /**
      *
      */
     public function __construct(EntityManager $manager)
@@ -39,6 +44,7 @@ class Conference implements MessageComponentInterface
         $this->manager = $manager;
         $this->clients = new \SplObjectStorage;
         $this->rooms = new ArrayCollection();
+        $this->dispatcher = new Dispatcher();
     }
 
     /**
@@ -53,14 +59,22 @@ class Conference implements MessageComponentInterface
         }
     }
 
+    /**
+     * @param ConnectionInterface $from
+     * @param string $msg
+     */
     public function onMessage(ConnectionInterface $from, $msg)
     {
-        if (! $from = $this->remakeConnection($from) ) {
+        if (!$from = $this->remakeConnection($from)) {
             return;
         }
+
         $message = Message::fromJSON($msg);
+        $room = $this->rooms[$from->getRoom()->getHash()];
+
         echo ">>>>>>> ({$from->resourceId}) {$message->getType()}\n";
 
+        $this->dispatcher->handle($room, $from, $message);
     }
 
     public function onClose(ConnectionInterface $conn)
@@ -90,12 +104,14 @@ class Conference implements MessageComponentInterface
                 $this->rooms[$room->getHash()] = new Room($this->manager, $room);
             }
             $this->rooms[$room->getHash()]->addWatcher($conn);
+
             return true;
         } catch (\InvalidArgumentException $e) {
             $conn->close(new Message('Bye', 'I don\'t think we\'re in Kansas anymore, Toto.'));
         } catch (\Exception $e) {
             $conn->close(new Message('Bye', 'Something bad happened, Harry'));
         }
+
         return false;
     }
 
@@ -112,6 +128,7 @@ class Conference implements MessageComponentInterface
             $message->sendTo($conn);
             $conn->close();
         }
+
         return null;
     }
 } 

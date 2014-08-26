@@ -3,7 +3,6 @@
 namespace Web\SocketBundle\Server\Message;
 
 use Ratchet\ConnectionInterface;
-use Web\SocketBundle\Server\Conference\Connection;
 
 /**
  * Class Message
@@ -25,7 +24,7 @@ class Message
      * @param $type
      * @param $payload
      */
-    public function __construct($type, $payload)
+    public function __construct($type, $payload = '')
     {
         $this->type = $type;
         $this->payload = $payload;
@@ -64,6 +63,17 @@ class Message
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * @param $payload
+     * @return Message
+     */
+    public function setPayload($payload)
+    {
+        $this->payload = $payload;
+
+        return $this;
     }
 
     /**

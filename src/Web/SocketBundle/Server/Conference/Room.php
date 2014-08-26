@@ -4,7 +4,6 @@ namespace Web\SocketBundle\Server\Conference;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
-use Ratchet\ConnectionInterface;
 use Web\SocketBundle\Server\Message\Message;
 
 /**
@@ -19,12 +18,12 @@ class Room
     private $id;
 
     /**
-     * @var ConnectionInterface
+     * @var Connection
      */
     private $leader;
 
     /**
-     * @var ArrayCollection
+     * @var Connection[]
      */
     private $watchers;
 
@@ -46,37 +45,72 @@ class Room
     }
 
     /**
-     * @param ConnectionInterface $conn
+     * @param Connection $conn
+     * @return bool
      */
-    public function addConnection(ConnectionInterface $conn)
+    public function isLeader(Connection $conn)
+    {
+        return $this->leader == $conn;
+    }
+
+    /**
+     * @param Connection $conn
+     * @return bool
+     */
+    public function isWatcher(Connection $conn)
+    {
+        return $this->watchers->contains($conn);
+    }
+
+    /**
+     * @param Connection $conn
+     */
+    public function addConnection(Connection $conn)
     {
         //Check is it leader or not and add
         //If not, throw exception
     }
 
     /**
-     * @param ConnectionInterface $leader
+     * @param Connection $leader
      */
-    public function setLeader(ConnectionInterface $leader)
+    public function setLeader(Connection $leader)
     {
         $this->leader = $leader;
     }
 
     /**
-     * @param ConnectionInterface $watcher
+     * @param Connection $watcher
      */
-    public function addWatcher(ConnectionInterface $watcher)
+    public function addWatcher(Connection $watcher)
     {
         $this->watchers[] = $watcher;
     }
 
     /**
-     * @param ConnectionInterface $watcher
+     * @param Connection $watcher
      */
-    public function dropWatcher(ConnectionInterface $watcher)
+    public function dropWatcher(Connection $watcher)
     {
         $this->watchers->removeElement($watcher);
         $watcher->send(new Message('Bye', 'Removed from room'));
         $watcher->close();
+    }
+
+    /**
+     * @param Message $message
+     * @param Connection $exclude
+     */
+    public function broadcast(Message $message, Connection $exclude = null)
+    {
+        foreach ($this->watchers as $watcher) {
+            if ( $watcher != $exclude ) {
+                $watcher->send($message);
+            }
+        }
+
+        if ( $this->leader != $exclude ) {
+            $this->leader->send($message);
+        }
     }
 } 
