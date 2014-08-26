@@ -1,0 +1,7 @@
+parameters:
+#    web_socket.example.class: Web\SocketBundle\Example
+
+services:
+#    web_socket.example:
+#        class: %web_socket.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
