@@ -61,8 +61,7 @@ class Room
 
     /**
      * Get id
-     *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -71,7 +70,6 @@ class Room
 
     /**
      * Set name
-     *
      * @param string $name
      * @return Room
      */
@@ -84,8 +82,7 @@ class Room
 
     /**
      * Get name
-     *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -94,7 +91,6 @@ class Room
 
     /**
      * Set token
-     *
      * @param string $token
      * @return Room
      */
@@ -107,8 +103,7 @@ class Room
 
     /**
      * Get token
-     *
-     * @return string 
+     * @return string
      */
     public function getToken()
     {
@@ -117,7 +112,6 @@ class Room
 
     /**
      * Set active_chat
-     *
      * @param boolean $activeChat
      * @return Room
      */
@@ -130,8 +124,7 @@ class Room
 
     /**
      * Get active_chat
-     *
-     * @return boolean 
+     * @return boolean
      */
     public function getActiveChat()
     {
@@ -140,7 +133,6 @@ class Room
 
     /**
      * Set active_files
-     *
      * @param boolean $activeFiles
      * @return Room
      */
@@ -153,8 +145,7 @@ class Room
 
     /**
      * Get active_files
-     *
-     * @return boolean 
+     * @return boolean
      */
     public function getActiveFiles()
     {
@@ -163,7 +154,6 @@ class Room
 
     /**
      * Add files
-     *
      * @param \Web\Bundle\UserBundle\Entity\File $files
      * @return Room
      */
@@ -176,7 +166,6 @@ class Room
 
     /**
      * Remove files
-     *
      * @param \Web\Bundle\UserBundle\Entity\File $files
      */
     public function removeFile(\Web\Bundle\UserBundle\Entity\File $files)
@@ -186,8 +175,7 @@ class Room
 
     /**
      * Get files
-     *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getFiles()
     {
@@ -196,7 +184,6 @@ class Room
 
     /**
      * Set owner
-     *
      * @param \Web\Bundle\UserBundle\Entity\User $owner
      * @return Room
      */
@@ -209,8 +196,7 @@ class Room
 
     /**
      * Get owner
-     *
-     * @return \Web\Bundle\UserBundle\Entity\User 
+     * @return \Web\Bundle\UserBundle\Entity\User
      */
     public function getOwner()
     {
@@ -219,7 +205,6 @@ class Room
 
     /**
      * Add users
-     *
      * @param \Web\Bundle\UserBundle\Entity\User $users
      * @return Room
      */
@@ -232,7 +217,6 @@ class Room
 
     /**
      * Remove users
-     *
      * @param \Web\Bundle\UserBundle\Entity\User $users
      */
     public function removeUser(\Web\Bundle\UserBundle\Entity\User $users)
@@ -242,8 +226,7 @@ class Room
 
     /**
      * Get users
-     *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getUsers()
     {

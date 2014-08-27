@@ -32,8 +32,7 @@ class File
 
     /**
      * Get id
-     *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -42,7 +41,6 @@ class File
 
     /**
      * Set name
-     *
      * @param string $name
      * @return File
      */
@@ -55,8 +53,7 @@ class File
 
     /**
      * Get name
-     *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -65,7 +62,6 @@ class File
 
     /**
      * Set physical
-     *
      * @param string $physical
      * @return File
      */
@@ -78,8 +74,7 @@ class File
 
     /**
      * Get physical
-     *
-     * @return string 
+     * @return string
      */
     public function getPhysical()
     {
@@ -88,7 +83,6 @@ class File
 
     /**
      * Set room
-     *
      * @param \Web\Bundle\UserBundle\Entity\Room $room
      * @return File
      */
@@ -101,8 +95,7 @@ class File
 
     /**
      * Get room
-     *
-     * @return \Web\Bundle\UserBundle\Entity\Room 
+     * @return \Web\Bundle\UserBundle\Entity\Room
      */
     public function getRoom()
     {

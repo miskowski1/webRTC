@@ -31,7 +31,7 @@ class User extends BaseUser
     {
         parent::__construct();
 
-        $this->rooms = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rooms       = new \Doctrine\Common\Collections\ArrayCollection();
         $this->invitations = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -46,7 +46,6 @@ class User extends BaseUser
 
     /**
      * Add rooms
-     *
      * @param \Web\Bundle\UserBundle\Entity\Room $rooms
      * @return User
      */
@@ -59,7 +58,6 @@ class User extends BaseUser
 
     /**
      * Remove rooms
-     *
      * @param \Web\Bundle\UserBundle\Entity\Room $rooms
      */
     public function removeRoom(\Web\Bundle\UserBundle\Entity\Room $rooms)
@@ -69,8 +67,7 @@ class User extends BaseUser
 
     /**
      * Get rooms
-     *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getRooms()
     {
@@ -79,7 +76,6 @@ class User extends BaseUser
 
     /**
      * Add invitations
-     *
      * @param \Web\Bundle\UserBundle\Entity\Room $invitations
      * @return User
      */
@@ -92,7 +88,6 @@ class User extends BaseUser
 
     /**
      * Remove invitations
-     *
      * @param \Web\Bundle\UserBundle\Entity\Room $invitations
      */
     public function removeInvitation(\Web\Bundle\UserBundle\Entity\Room $invitations)
@@ -102,13 +97,13 @@ class User extends BaseUser
 
     /**
      * Get invitations
-     *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getInvitations()
     {
         return $this->invitations;
     }
+
     /**
      * @var \DateTime
      */
@@ -117,7 +112,6 @@ class User extends BaseUser
 
     /**
      * Set last_activity
-     *
      * @param \DateTime $lastActivity
      * @return User
      */
@@ -130,8 +124,7 @@ class User extends BaseUser
 
     /**
      * Get last_activity
-     *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getLastActivity()
     {
@@ -143,5 +136,32 @@ class User extends BaseUser
         $this->setLastActivity(new \DateTime());
 
         return $this;
+    }
+
+    /**
+     * @var \Web\Bundle\UserBundle\Entity\RoomInvite
+     */
+    private $invite;
+
+
+    /**
+     * Set invite
+     * @param \Web\Bundle\UserBundle\Entity\RoomInvite $invite
+     * @return User
+     */
+    public function setInvite(\Web\Bundle\UserBundle\Entity\RoomInvite $invite = null)
+    {
+        $this->invite = $invite;
+
+        return $this;
+    }
+
+    /**
+     * Get invite
+     * @return \Web\Bundle\UserBundle\Entity\RoomInvite
+     */
+    public function getInvite()
+    {
+        return $this->invite;
     }
 }

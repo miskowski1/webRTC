@@ -16,14 +16,14 @@
         <div class="panel-body">
             <table class="table table-stripped table-hover">
                 <thead>
-                    <tr>
-                        <th style="width:5%; text-align: center;">#</th>
-                        <th>Nazwa pokoju</th>
-                        <th>Liczba zaproszonych</th>
-                        <th>Aktywny Chat</th>
-                        <th>Aktywne załączniki</th>
-                        <th>Akcje</th>
-                    </tr>
+                <tr>
+                    <th style="width:5%; text-align: center;">#</th>
+                    <th>Nazwa pokoju</th>
+                    <th>Liczba zaproszonych</th>
+                    <th>Aktywny Chat</th>
+                    <th>Aktywne załączniki</th>
+                    <th>Akcje</th>
+                </tr>
                 </thead>
                 <tbody>
                 {% for room in rooms %}
@@ -37,9 +37,29 @@
                             <a href="{{ path('admin_room_edit', { 'id': room.id }) }}" title="Edycja">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </a>
-                            <a href="{{ path('admin_room_edit', { 'id': room.id }) }}" title="Edycja">
+                            <a href="#delete-{{ room.id }}" data-toggle="modal">
                                 <span class="glyphicon glyphicon-trash"></span>
                             </a>
+                            <div class="modal fade" id="delete-{{ room.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title">Pokój: {{ room.name }}</h4>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            Czy jesteś pewien że chcesz usunąć pokój?
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">{{ "Anuluj"|trans }}</button>
+                                            <a href="{{ path('admin_room_remove', { 'id': room.id }) }}" class="btn btn-danger">{{ "Usuń"|trans }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </td>
                     </tr>
                 {% endfor %}

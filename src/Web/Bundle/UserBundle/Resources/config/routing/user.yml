@@ -1,2 +1,7 @@
 admin_user_invite:
     path: /invite
+    defaults: { _controller: WebUserBundle:Room:inviteUser }
+
+admin_user_remove:
+    path: /remove/{room}/{user}
+    defaults: { _controller: WebUserBundle:Room:removeUser }

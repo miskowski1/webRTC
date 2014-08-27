@@ -40,7 +40,7 @@ class RoomRepository extends EntityRepository
     {
         return $this->createQueryBuilder('r')
             ->where('r.id = :room')
-                ->andWhere('r.owner = :user')
+            ->andWhere('r.owner = :user')
             ->setParameter('user', $user)
             ->setParameter('room', $id)
             ->getQuery()

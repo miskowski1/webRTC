@@ -9,3 +9,7 @@ admin_room_add:
 admin_room_edit:
     path: /edit/{id}
     defaults: { _controller: "WebUserBundle:Room:edit" }
+
+admin_room_remove:
+    path: /delete/{id}
+    defaults: { _controller: "WebUserBundle:Room:remove" }

@@ -2,30 +2,30 @@
 
 
 {% block content %}
-{% if form is defined %}
-{% form_theme form '::form_row.html.twig' %}
-{% endif %}
-<div class="row">
-    <div class="col-md-12">
-        <div class="page-header">
-            <h1>Stwórz własny pokój</h1>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-12">
-        {{ form_start(form, {'attr': {'class':'form-horizontal', 'novalidate' : 'novalidate'}} ) }}
-        {{ form_row(form.name) }}
-        {{ form_row(form.active_chat) }}
-        {{ form_row(form.active_files) }}
-        <div class="form-group">
-            <div class="col-lg-offset-2 col-lg-10">
-                {{ form_widget(form.save, { 'attr' : { 'class' : 'btn btn-primary' }} ) }}
+    {% if form is defined %}
+        {% form_theme form '::form_row.html.twig' %}
+    {% endif %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header">
+                <h1>Stwórz własny pokój</h1>
             </div>
         </div>
-        {{ form_end(form) }}
     </div>
-</div>
+
+    <div class="row">
+        <div class="col-md-12">
+            {{ form_start(form, {'attr': {'class':'form-horizontal', 'novalidate' : 'novalidate' }} ) }}
+            {{ form_row(form.name) }}
+            {{ form_row(form.active_chat) }}
+            {{ form_row(form.active_files) }}
+            <div class="form-group">
+                <div class="col-lg-offset-2 col-lg-10">
+                    {{ form_widget(form.save, { 'attr' : { 'class' : 'btn btn-primary' }} ) }}
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
 
 {% endblock %}

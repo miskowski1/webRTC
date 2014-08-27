@@ -4,8 +4,9 @@ namespace Web\Bundle\UserBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Web\Bundle\UserBundle\Entity\Room;
+use Web\Bundle\UserBundle\Entity\RoomInvite;
+use Web\Bundle\UserBundle\Form\InviteType;
 use Web\Bundle\UserBundle\Form\RoomType;
-use Web\Bundle\UserBundle\Form\UserType;
 
 /**
  * Class RoomController
@@ -77,6 +78,7 @@ class RoomController extends Controller
         $em   = $this->getDoctrine()->getManager();
         $user = $this->getUser();
 
+        /** @var $room \Web\Bundle\UserBundle\Entity\Room */
         $room = $em->getRepository('WebUserBundle:Room')->ownedRoom($user, $id);
 
         $roomForm = $this->createForm(
@@ -87,10 +89,14 @@ class RoomController extends Controller
                 'action' => $this->generateUrl('admin_room_edit', array('id' => $id))
             )
         );
-        $userForm = $this->createForm(new UserType(), null, array(
-            'method' => 'POST',
-            'action' => $this->generateUrl('admin_user_invite'),
-        ));
+        $userForm = $this->createForm(
+            new InviteType(),
+            null,
+            array(
+                'method' => 'POST',
+                'action' => $this->generateUrl('admin_user_invite'),
+            )
+        );
         if ($request->isMethod('POST')) {
             $roomForm->handleRequest($request);
             if ($roomForm->isValid()) {
@@ -105,15 +111,56 @@ class RoomController extends Controller
         return $this->render(
             'WebUserBundle:Room:Edit.html.twig',
             array(
-                'roomForm'  => $roomForm->createView(),
-                'userForm'      => $userForm->createView(),
-                'users'     => $room->getUsers()
+                'roomForm' => $roomForm->createView(),
+                'userForm' => $userForm->createView(),
+                'users'    => $room->getUsers()
             )
         );
     }
 
-    public function inviteUserAction(Request $request) {
-        //$user
+    /**
+     * Remove room
+     */
+    public function removeAction($id)
+    {
+        $room = $this
+            ->getDoctrine()
+            ->getRepository('WebUserBundle:Room')
+            ->find($id);
+        if (! $room) {
+            return $this->redirect($this->generateUrl('admin_rooms'));
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($room);
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('admin_rooms'));
+    }
+
+    /**
+     * Invite user
+     */
+    public function inviteUserAction(Request $request)
+    {
+        $invite = new RoomInvite();
+
+        $form = $this->createForm(
+            new InviteType(),
+            $invite,
+            array(
+                'method' => 'POST',
+            )
+        );
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($invite);
+            $em->flush($invite);
+
+            // @TODO: send mail
+        }
+        return $this->redirect($request->headers->get('referer'));
     }
 
     /**
@@ -136,7 +183,7 @@ class RoomController extends Controller
             $this->generateUrl(
                 'admin_room_edit',
                 array(
-                    'id' => $room
+                    'id' => $room->getId()
                 )
             )
         );

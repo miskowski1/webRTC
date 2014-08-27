@@ -11,6 +11,11 @@ Web\Bundle\UserBundle\Entity\User:
         last_activity:
             type: datetime
             nullable: true
+    oneToOne:
+        invite:
+            targetEntity: RoomInvite
+            mappedBy: user
+            cascade: ["all"]
     oneToMany:
         rooms:
             targetEntity: Room

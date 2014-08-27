@@ -17,13 +17,16 @@ class RtcController extends Controller
         /** @var $user \Web\Bundle\UserBundle\Entity\User */
         $user = $this->getUser();
 
-        $rooms          = $user->getRooms();
-        $invitiations   = $user->getInvitations();
+        $rooms        = $user->getRooms();
+        $invitiations = $user->getInvitations();
 
-        return $this->render('WebUserBundle:Rtc:Rooms.html.twig', array(
-            'rooms' => $rooms,
-            'invitations' => $invitiations
-        ));
+        return $this->render(
+            'WebUserBundle:Rtc:Rooms.html.twig',
+            array(
+                'rooms'       => $rooms,
+                'invitations' => $invitiations
+            )
+        );
     }
 
     /**
@@ -41,9 +44,12 @@ class RtcController extends Controller
             return $this->redirect($this->generateUrl('rooms'));
         }
 
-        return $this->render('WebUserBundle:Rtc:Conference.html.twig', array(
-            'room' => $room,
-        ));
+        return $this->render(
+            'WebUserBundle:Rtc:Conference.html.twig',
+            array(
+                'room' => $room,
+            )
+        );
     }
 
     /**

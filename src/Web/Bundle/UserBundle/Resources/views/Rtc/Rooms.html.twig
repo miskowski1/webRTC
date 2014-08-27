@@ -4,13 +4,13 @@
     <div class="col-sm-6">
         <h2>Moje pokoje</h2>
         {% if rooms|length > 0 %}
-        <ul>
-        {% for room in rooms %}
-            <li><a href="{{ path('conference', {'id': room.id}) }}">{{ room.name }}</a></li>
-        {% endfor %}
-        </ul>
+            <ul>
+                {% for room in rooms %}
+                    <li><a href="{{ path('conference', {'id': room.id}) }}">{{ room.name }}</a></li>
+                {% endfor %}
+            </ul>
         {% else %}
-        <div>Brak pokoiiiiiiii</div>
+            <div>Brak pokoiiiiiiii</div>
         {% endif %}
     </div>
     <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
