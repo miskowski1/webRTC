@@ -4,7 +4,7 @@ parameters:
 services:
     activity_listener:
         class: Web\Bundle\UserBundle\EventListener\ActivityListener
-        arguments: [@security.context, @doctrine.orm.entity_manager, %web_user.interval%]
+        arguments: [@security.context, @doctrine.orm.entity_manager, %web_user.interval%, @session]
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onController }
 

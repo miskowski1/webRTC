@@ -4,8 +4,8 @@
     <div class="blog-masthead">
         <div class="container">
             <nav class="blog-nav">
-                <a class="blog-nav-item active" href="{{ path('rooms') }}">Pokoje</a>
-                <a class="blog-nav-item" href="{{ path('admin_rooms') }}">Zarządzaj pokojami</a>
+                <a class="blog-nav-item{% if app.session.get('controller') == 'rtc' %} active{% endif %}" href="{{ path('rooms') }}">Pokoje</a>
+                <a class="blog-nav-item{% if app.session.get('controller') == 'room' %} active{% endif %}" href="{{ path('admin_rooms') }}">Zarządzaj pokojami</a>
                 <a class="blog-nav-item" href="{{ path('fos_user_security_logout') }}">Wyloguj</a>
             </nav>
         </div>
