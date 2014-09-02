@@ -16,17 +16,24 @@ class Message
     private $type;
 
     /**
+     * @var string
+     */
+    private $user;
+
+    /**
      * @var mixed
      */
     private $payload;
 
     /**
      * @param $type
-     * @param $payload
+     * @param $user
+     * @param string $payload
      */
-    public function __construct($type, $payload = '')
+    public function __construct($type, $user, $payload = '')
     {
         $this->type = $type;
+        $this->user = $user;
         $this->payload = $payload;
     }
 
@@ -39,10 +46,10 @@ class Message
     {
         if ($json) {
             $obj = json_decode($json);
-            if (!isset($obj->type) || !isset($obj->payload)) {
+            if (!isset($obj->type) || !isset($obj->user) || !isset($obj->payload)) {
                 throw new \InvalidArgumentException('Incomplete object passed. ' . $json);
             }
-            return new self($obj->type, $obj->payload);
+            return new self($obj->type, $obj->user, $obj->payload);
         }
         return null;
     }
@@ -54,7 +61,8 @@ class Message
     public function sendTo(ConnectionInterface $receiver)
     {
         echo "<<<<<<< ({$receiver->resourceId}) {$this->getType()}\n";
-        return $receiver->send(json_encode($this));
+        echo json_encode(get_object_vars($this))."\n";
+        return $receiver->send(json_encode(get_object_vars($this)));
     }
 
     /**
@@ -63,6 +71,25 @@ class Message
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param $user
+     * @return Message
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
     }
 
     /**

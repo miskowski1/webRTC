@@ -2,8 +2,7 @@
 
 namespace Web\SocketBundle\Server;
 
-use Web\SocketBundle\Handler\HandlerInterface;
-use Web\SocketBundle\Handler\MediaHandler;
+use Web\SocketBundle\Handler;
 use Web\SocketBundle\Server\Conference\Connection;
 use Web\SocketBundle\Server\Conference\Room;
 use Web\SocketBundle\Server\Message\Message;
@@ -15,7 +14,7 @@ use Web\SocketBundle\Server\Message\Message;
 class Dispatcher
 {
     /**
-     * @var HandlerInterface[]
+     * @var Handler\HandlerInterface[]
      */
     private $handlers = array();
 
@@ -24,7 +23,10 @@ class Dispatcher
      */
     public function __construct()
     {
-        $this->handlers['media'] = new MediaHandler();
+        $this->handlers['GENERAL'] = new Handler\GeneralHandler();
+        $this->handlers['MEDIA'] = new Handler\MediaHandler();
+        $this->handlers['ROOM'] = new Handler\RoomHandler();
+        $this->handlers['CONNECT'] = new Handler\ConnectHandler();
     }
 
     /**
@@ -34,9 +36,11 @@ class Dispatcher
      */
     public function handle(Room $room, Connection $connection, Message $message)
     {
-        if (isset($this->handlers[$message->getType()])) {
-            $this->handlers[$message->getType()]->handle($room, $connection, $message);
+        $type = strtoupper($message->getType());
+        if (isset($this->handlers[$type])) {
+            $this->handlers[$type]->handle($room, $connection, $message);
         } else {
+            $this->handlers['GENERAL']->handle($room, $connection, $message);
             echo "!!!!!!! Unable to handle request {$message->getType()}. Missing handler? !!!!!!!!!\n";
         }
     }

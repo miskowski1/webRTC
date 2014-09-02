@@ -37,7 +37,7 @@ class MediaHandler implements HandlerInterface
     public function handleLeaderMedia(Room $room, Connection $connection, Message $message)
     {
         $payload = $message->getPayload();
-        $message = new Message('media');
+        $message = new Message('media', $message->getUser());
 
         if ($payload == 'READY') {
             $message->setPayload('START');
@@ -56,7 +56,7 @@ class MediaHandler implements HandlerInterface
     public function handleWatcherMedia(Room $room, Connection $connection, Message $message)
     {
         $payload = $message->getPayload();
-        $message = new Message('media');
+        $message = new Message('media', $message->getUser());
 
         if ($payload == 'READY') {
             $message->setPayload('ADD');

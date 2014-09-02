@@ -5,6 +5,7 @@ namespace Web\SocketBundle\Server\Conference;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Web\SocketBundle\Server\Message\Message;
+use Web\Bundle\UserBundle\Entity\Room as EntityRoom;
 
 /**
  * Class Room
@@ -13,9 +14,9 @@ use Web\SocketBundle\Server\Message\Message;
 class Room
 {
     /**
-     * @var string Hash
+     * @var \Web\Bundle\UserBundle\Entity\Room
      */
-    private $id;
+    private $room;
 
     /**
      * @var Connection
@@ -34,12 +35,12 @@ class Room
 
     /**
      * @param EntityManager $manager
-     * @param string $roomID token
+     * @param EntityRoom $room
      */
-    public function __construct(EntityManager $manager, $roomID)
+    public function __construct(EntityManager $manager, EntityRoom $room)
     {
         $this->manager = $manager;
-        $this->id = $roomID;
+        $this->room = $room;
         // Add room check, if not throw exception
         $this->watchers = new ArrayCollection();
     }
@@ -59,16 +60,31 @@ class Room
      */
     public function isWatcher(Connection $conn)
     {
-        return $this->watchers->contains($conn);
+        return $this->watchers->containsKey($conn->resourceId);
     }
 
     /**
      * @param Connection $conn
+     * @throws \Exception
      */
     public function addConnection(Connection $conn)
     {
-        //Check is it leader or not and add
-        //If not, throw exception
+        if ($this->room !== $conn->getRoom()) {
+            throw new \Exception('Invalid room');
+        }
+        if ($this->room->getOwner() == $conn->getUser()) {
+            $this->setLeader($conn);
+        } elseif ($this->room->getUsers()->contains($conn->getUser())) {
+            $this->addWatcher($conn);
+        } else {
+            throw new \Exception('GET THE FUCK OUT');
+        }
+        $this->broadcast(
+            new Message('new', $conn->getUser()->getId(), array(
+                $conn->getUser()->getId() => $conn->getUser()->getEmailCanonical()
+            )),
+            $conn
+        );
     }
 
     /**
@@ -84,7 +100,7 @@ class Room
      */
     public function addWatcher(Connection $watcher)
     {
-        $this->watchers[] = $watcher;
+        $this->watchers[$watcher->getUser()->getId()] = $watcher;
     }
 
     /**
@@ -104,13 +120,65 @@ class Room
     public function broadcast(Message $message, Connection $exclude = null)
     {
         foreach ($this->watchers as $watcher) {
-            if ( $watcher != $exclude ) {
+            if ($watcher != $exclude) {
                 $watcher->send($message);
             }
         }
 
-        if ( $this->leader != $exclude ) {
+        if ($this->leader != null && $this->leader != $exclude) {
             $this->leader->send($message);
+        }
+    }
+
+    /**
+     * @param Message $message
+     * @param int $userId
+     */
+    public function sendTo(Message $message, $userId)
+    {
+        if ($this->watchers->containsKey($userId)) {
+            $this->watchers[$userId]->send($message);
+        }
+        if ($this->leader->getUser()->getId() == $userId) {
+            $this->leader->send($message);
+        }
+    }
+
+    /**
+     * Send info about all participants
+     * @param Connection $connection
+     */
+    public function shareList(Connection $connection)
+    {
+        $all = array();
+        foreach ($this->watchers as $id => $watcher) {
+            $all[$id] = $watcher->getUser()->getEmailCanonical();
+        }
+
+        if ( $this->leader ) {
+            $all[$this->leader->getUser()->getId()] = $this->leader->getUser()->getEmailCanonical();
+        }
+
+        $message = new Message('room', $connection->getUser()->getId(), $all);
+
+        $connection->send($message);
+    }
+
+    /**
+     * Send who to connect to
+     */
+    public function initiateConnection()
+    {
+        $all = array();
+        foreach($this->watchers as $id => $tmp) {
+            $all[$id] = $id;
+        }
+        $all[$this->leader->getUser()->getId()] = $this->leader->getUser()->getId();
+
+        foreach($this->watchers as $id => $watcher) {
+            unset($all[$id]);
+            $message = new Message('connect', null, array_keys($all));
+            $watcher->send($message);
         }
     }
 } 

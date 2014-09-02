@@ -14,18 +14,19 @@ class RoomRepository extends EntityRepository
      * Find the right room
      * @param UserInterface $user
      * @param               $id
+     * @return \Web\Bundle\UserBundle\Entity\Room|null
      */
     public function findRoom(UserInterface $user, $id)
     {
         $qb = $this->createQueryBuilder('r')
-            ->join('r.users', 'u')
-            ->where('u.id = :user')
+            ->leftJoin('r.users', 'u')
+            ->where('u = :user')
             ->orWhere('r.owner = :user')
             ->andWhere('r.id = :room')
             ->setParameter('user', $user)
             ->setParameter('room', $id)
             ->getQuery()
-            ->getResult();
+            ->getOneOrNullResult();
 
         return $qb;
     }

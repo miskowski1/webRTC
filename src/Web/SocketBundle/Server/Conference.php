@@ -70,7 +70,7 @@ class Conference implements MessageComponentInterface
         }
 
         $message = Message::fromJSON($msg);
-        $room = $this->rooms[$from->getRoom()->getHash()];
+        $room = $this->rooms[$from->getRoom()->getToken()];
 
         echo ">>>>>>> ({$from->resourceId}) {$message->getType()}\n";
 
@@ -100,10 +100,10 @@ class Conference implements MessageComponentInterface
     {
         try {
             $room = $conn->getRoom();
-            if (!$this->rooms->containsKey($room->getHash())) {
-                $this->rooms[$room->getHash()] = new Room($this->manager, $room);
+            if (!$this->rooms->containsKey($room->getToken())) {
+                $this->rooms[$room->getToken()] = new Room($this->manager, $room);
             }
-            $this->rooms[$room->getHash()]->addWatcher($conn);
+            $this->rooms[$room->getToken()]->addConnection($conn);
 
             return true;
         } catch (\InvalidArgumentException $e) {

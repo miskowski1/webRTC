@@ -1,4 +1,7 @@
+'use strict';
+var Socket;
 (function () {
+    var that;
     Socket = function (url, room, user) {
         this.url = url;
         this.room = room;
@@ -28,15 +31,16 @@
             this.socket = new WebSocket(this.fullURL);
             this.socket.onmessage = this.handleMessage;
         },
-        send: function (type, message) {
-            data = {
+        send: function (type, message, user) {
+            var data = {
                 'type': type,
+                'user': typeof user !== 'undefined' ? user : 'EMPTY',
                 'payload' : message
             };
-            console.log("<<<<<<", data);
+            //console.log("<<<<<<", data);
             if (this.socket.readyState !== 1) {
                 this.wait(this.socket, function() {
-                    this.socket.send(JSON.stringify(data));
+                    that.socket.send(JSON.stringify(data));
                 });
             } else {
                 this.socket.send(JSON.stringify(data));
@@ -49,11 +53,12 @@
             this.handlers[type] = callback;
         },
         handleMessage: function(event) {
+            //console.log(">>>>>", event);
             var message = JSON.parse(event.data);
             if (message.hasOwnProperty('type')
                 && that.handlers.hasOwnProperty(message.type)
             ) {
-                return that.handlers[message.type](message.payload);
+                return that.handlers[message.type](message.payload, message);
             }
             return that.onmessage(event);
         }

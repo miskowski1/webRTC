@@ -15,7 +15,7 @@
             </ul>
             <div class="tab-content">
                 <div id="video" class="tab-pane fade in active">
-                    <video id="main-video"></video>
+                    <video id="main-video" autoplay></video>
                     <a href="#" id="fullscreen"><span>Fullscreen</span></a>
                 </div>
                 <div id="slide" class="tab-pane fade">
@@ -27,18 +27,6 @@
 
         <div class="cameras">
             <ul>
-                <li class="ui-state-default">
-                    <video style="background: green"></video>
-                    <div class="info">Maciek z klanu</div>
-                </li>
-                <li class="ui-state-default">
-                    <video style="background: blue"></video>
-                    <div class="info">Miś uszatek</div>
-                </li>
-                <li class="ui-state-default">
-                    <video style="background: yellow"></video>
-                    <div class="info">Hatifnat</div>
-                </li>
             </ul>
         </div>
     </div>
@@ -53,6 +41,17 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script type="text/javascript">
+        var settings = {
+            room: "{{ room.token }}",
+            user: "{{ app.user.id }}",
+            url: "{{ app.request.host }}"
+        };
+    </script>
     <script type="text/javascript" src="{{ asset('js/video.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/custom.js') }}"></script>
+    <script type="text/javascript" src='{{ asset('js/rtc/adapter.js') }}'></script>
+    <script type="text/javascript" src='{{ asset('js/rtc/socket.js') }}'></script>
+    <script type="text/javascript" src='{{ asset('js/rtc/preview.js') }}'></script>
+    <script type="text/javascript" src='{{ asset('js/rtc/peer.js') }}'></script>
+    <script type="text/javascript" src='{{ asset('js/rtc/rtc.js') }}'></script>
 {% endblock %}

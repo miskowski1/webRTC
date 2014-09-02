@@ -3,8 +3,10 @@
 namespace Web\SocketBundle\Server\Conference;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityNotFoundException;
 use Ratchet\ConnectionInterface;
-use Symfony\Component\Intl\Exception\NotImplementedException;
+use Web\Bundle\UserBundle\Entity\Room;
+use Web\Bundle\UserBundle\Entity\User;
 use Web\SocketBundle\Server\Message\Message;
 
 /**
@@ -28,13 +30,13 @@ class Connection
      */
     private $manager;
 
-    /**@TODO
-     * @var
+    /**
+     * @var Room
      */
     private $room;
 
-    /**@TODO
-     * @var
+    /**
+     * @var User
      */
     private $user;
 
@@ -86,14 +88,14 @@ class Connection
     public function setRoom()
     {
         $roomID = $this->getQuery('room');
-        throw new NotImplementedException('Nope');
-        //@TODO handle room extraction
-        //Throw exception if not found
-        //$room = $this->manager->getRepository();
+        $this->room = $this->manager->getRepository('WebUserBundle:Room')->findOneBy(array('token' => $roomID));
+        if ( $this->room == null ) {
+            throw new EntityNotFoundException('Not found');
+        }
     }
 
     /**
-     * @return @TODO
+     * @return Room
      */
     public function getRoom()
     {
@@ -106,15 +108,14 @@ class Connection
     public function setUser()
     {
         $userToken = $this->getQuery('user');
-        throw new NotImplementedException('Nope');
-        //@TODO handle user extraction
-        //Throw exception if not found
-        //$user = $this->manager->getRepository();
-        //
+        $this->user = $this->manager->getRepository('WebUserBundle:User')->find($userToken);
+        if ( $this->user == null ) {
+            throw new EntityNotFoundException('Not found');
+        }
     }
 
     /**
-     * @return @TODO
+     * @return User
      */
     public function getUser()
     {
