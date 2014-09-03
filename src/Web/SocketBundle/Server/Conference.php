@@ -81,6 +81,14 @@ class Conference implements MessageComponentInterface
     {
         // The connection is closed, remove it, as we can no longer send it messages
         $this->clients->detach($conn);
+        if (!$conn = $this->remakeConnection($conn)) {
+            return;
+        }
+        $room = $conn->getRoom();
+        if ($this->rooms->containsKey($room->getToken())) {
+            $this->rooms[$conn->getRoom()->getToken()]->removeWatcher($conn);
+            $this->rooms[$conn->getRoom()->getToken()]->notifyLeave($conn);
+        }
 
         echo ">------- {$conn->resourceId} has disconnected\n";
     }

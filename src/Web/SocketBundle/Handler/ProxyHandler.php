@@ -7,12 +7,14 @@ use Web\SocketBundle\Server\Conference\Room;
 use Web\SocketBundle\Server\Message\Message;
 
 /**
- * Class MediaHandler
+ * Class ProxyHandler
  * @package Web\SocketBundle\Handler
  */
-class MediaHandler implements HandlerInterface
+class ProxyHandler implements HandlerInterface
 {
-
+    /**
+     * {@inheritDoc}
+     */
     public function __construct(){}
 
     /**
@@ -22,8 +24,8 @@ class MediaHandler implements HandlerInterface
      */
     public function handle(Room $room, Connection $connection, Message $message)
     {
-        if ($room->isInitiated()) {
-            $room->initiateConnection($connection);
-        }
+        $id = $message->getUser();
+        $message->setUser($connection->getUser()->getId());
+        $room->sendTo($message, $id);
     }
 } 

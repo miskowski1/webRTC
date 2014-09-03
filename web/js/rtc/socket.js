@@ -2,11 +2,11 @@
 var Socket;
 (function () {
     var that;
-    Socket = function (url, room, user) {
-        this.url = url;
+    Socket = function (url, port, room, user) {
+        this.url = 'ws://' + url + ":" + port;
         this.room = room;
         this.user = user;
-        this.fullURL = url + '/?room=' + room + '&user=' + user;
+        this.fullURL = this.url + '/?room=' + room + '&user=' + user;
         this.socket = undefined;
         this.handlers = {};
         that = this;
@@ -37,7 +37,7 @@ var Socket;
                 'user': typeof user !== 'undefined' ? user : 'EMPTY',
                 'payload' : message
             };
-            //console.log("<<<<<<", data);
+            console.log("<<<<<<", data);
             if (this.socket.readyState !== 1) {
                 this.wait(this.socket, function() {
                     that.socket.send(JSON.stringify(data));
@@ -53,7 +53,7 @@ var Socket;
             this.handlers[type] = callback;
         },
         handleMessage: function(event) {
-            //console.log(">>>>>", event);
+            console.log(">>>>>", event);
             var message = JSON.parse(event.data);
             if (message.hasOwnProperty('type')
                 && that.handlers.hasOwnProperty(message.type)

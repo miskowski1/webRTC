@@ -2,7 +2,7 @@
 
 var cameras = $('.cameras > ul');
 var prototype = '' +
-    '<li id="{{ID}}" class="ui-state-default">'+
+    '<li id="user-camera-{{ID}}" class="ui-state-default">'+
         '<video autoplay muted></video>'+
         '<div class="info">{{NAME}}</div>'+
     '</li>';
@@ -23,5 +23,5 @@ cameras.on('click', 'li', function(){
 });
 
 function removeCameraStream(ID) {
-    $('#' + ID).remove();
+    $('#user-camera-' + ID).remove();
 }

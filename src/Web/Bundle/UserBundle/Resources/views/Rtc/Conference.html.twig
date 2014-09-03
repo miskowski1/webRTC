@@ -45,7 +45,8 @@
         var settings = {
             room: "{{ room.token }}",
             user: "{{ app.user.id }}",
-            url: "{{ app.request.host }}"
+            url: "{{ app.request.host }}",
+            port: "8080"
         };
     </script>
     <script type="text/javascript" src="{{ asset('js/video.js') }}"></script>

@@ -27,6 +27,8 @@ class Dispatcher
         $this->handlers['MEDIA'] = new Handler\MediaHandler();
         $this->handlers['ROOM'] = new Handler\RoomHandler();
         $this->handlers['CONNECT'] = new Handler\ConnectHandler();
+        $this->handlers['OFFER'] = $this->handlers['ANSWER'] = $this->handlers['CANDIDATE'] = new Handler\ProxyHandler();
+        $this->handlers['BYE'] = new Handler\ByeHandler();
     }
 
     /**

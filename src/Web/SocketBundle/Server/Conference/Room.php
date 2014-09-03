@@ -34,6 +34,11 @@ class Room
     private $manager;
 
     /**
+     * @var boolean
+     */
+    private $initiatiated;
+
+    /**
      * @param EntityManager $manager
      * @param EntityRoom $room
      */
@@ -41,6 +46,7 @@ class Room
     {
         $this->manager = $manager;
         $this->room = $room;
+        $this->initiatiated = false;
         // Add room check, if not throw exception
         $this->watchers = new ArrayCollection();
     }
@@ -61,6 +67,14 @@ class Room
     public function isWatcher(Connection $conn)
     {
         return $this->watchers->containsKey($conn->resourceId);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInitiated()
+    {
+        return $this->initiatiated;
     }
 
     /**
@@ -101,6 +115,14 @@ class Room
     public function addWatcher(Connection $watcher)
     {
         $this->watchers[$watcher->getUser()->getId()] = $watcher;
+    }
+
+    /**
+     * @param Connection $watcher
+     */
+    public function removeWatcher(Connection $watcher)
+    {
+        $this->watchers->removeElement($watcher);
     }
 
     /**
@@ -155,7 +177,7 @@ class Room
             $all[$id] = $watcher->getUser()->getEmailCanonical();
         }
 
-        if ( $this->leader ) {
+        if ($this->leader) {
             $all[$this->leader->getUser()->getId()] = $this->leader->getUser()->getEmailCanonical();
         }
 
@@ -166,19 +188,39 @@ class Room
 
     /**
      * Send who to connect to
+     * @param Connection $connection
      */
-    public function initiateConnection()
+    public function initiateConnection(Connection $connection = null)
     {
+        $this->initiatiated = true;
         $all = array();
-        foreach($this->watchers as $id => $tmp) {
+        foreach ($this->watchers as $id => $tmp) {
+            if ($connection != null && $id == $connection->getUser()->getId()) {
+                continue;
+            }
             $all[$id] = $id;
         }
-        $all[$this->leader->getUser()->getId()] = $this->leader->getUser()->getId();
-
-        foreach($this->watchers as $id => $watcher) {
-            unset($all[$id]);
-            $message = new Message('connect', null, array_keys($all));
-            $watcher->send($message);
+        if ($connection == null || $connection->getUser()->getId() != $this->leader->getUser()->getId()) {
+            $all[$this->leader->getUser()->getId()] = $this->leader->getUser()->getId();
         }
+        if ($connection == null ) {
+            foreach ($this->watchers as $id => $watcher) {
+                unset($all[$id]);
+                $message = new Message('connect', null, array_keys($all));
+                $watcher->send($message);
+            }
+        } else {
+            $message = new Message('connect', null, array_keys($all));
+            $connection->send($message);
+        }
+    }
+
+    /**
+     * @param Connection $connection
+     */
+    public function notifyLeave(Connection $connection)
+    {
+        $message = new Message('disconnect', $connection->getUser()->getId(), 'BYE');
+        $this->broadcast($message);
     }
 } 

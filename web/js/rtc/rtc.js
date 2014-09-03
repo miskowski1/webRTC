@@ -12,7 +12,7 @@ var localStream;
 var peerConnections = [];
 var participants = [];
 
-var socket = new Socket("ws://"+settings.url+":8080", settings.room, settings.user);
+var socket = new Socket(settings.url, settings.port, settings.room, settings.user);
 socket.connect();
 socket.send('room', 'ALL');
 
@@ -28,18 +28,17 @@ socket.on('new', function (data) {
     }
 });
 
-socket.on('disconnect', function (data) {
-    if (typeof data == 'string') {
-        if (participants.hasOwnProperty(data)) {
-            delete participants[data];
-        }
-        if (peerConnections.hasOwnProperty(data)) {
-            var peer = peerConnections[data];
-            peer.close();
-            delete peerConnections[data];
-        }
-        removeCameraStream(data);
+socket.on('disconnect', function (data, message) {
+    var user = message.user;
+    if (participants.hasOwnProperty(user)) {
+        delete participants[data];
     }
+    if (peerConnections.hasOwnProperty(user)) {
+        var peer = peerConnections[user];
+        peer.close();
+        delete peerConnections[user];
+    }
+    removeCameraStream(user);
 });
 
 socket.on('connect', function (data) {
@@ -86,14 +85,13 @@ socket.on('offer', function (data, message) {
     if (typeof message.user != 'undefined') {
         var peer;
         if (message.user in peerConnections) {
-            peer = peerConnections[message.user];
-        } else {
-            peer = Peer();
-            peer.user = message.user;
-            peer.name = participants[message.user];
-            peer.addStream(localStream);
-            peerConnections[message.user] = peer;
+            delete peerConnections[message.user];
         }
+        peer = Peer();
+        peer.user = message.user;
+        peer.name = participants[message.user];
+        peer.addStream(localStream);
+        peerConnections[message.user] = peer;
         var offer = new RTCSessionDescription(data);
         peer.setRemoteDescription(offer, function () {
             makeAnswer(peer);
@@ -168,16 +166,16 @@ console.log('Getting user media with constraints', constraints);
 
 
 socket.on('bye', function (data, message) {
-/*    if (isStarted) {
-        peerConnection.close();
-         peerConnection = null;
-         isStarted = false;
-         isInitiator = false;
-    }*/
     console.log("Got Bye");
     console.log(message);
+
 });
 
-/*window.onbeforeunload = function(e){
- sendMessage('bye');
- };*/
+window.onbeforeunload = function(){
+    socket.send('BYE', 'LEAVING');
+    socket.socket.close();
+};
+
+function startConference() {
+    socket.send('CONNECT', 'ALL');
+}

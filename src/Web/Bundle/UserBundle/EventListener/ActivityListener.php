@@ -53,11 +53,6 @@ class ActivityListener
         $controller = new \ReflectionClass(get_class($invoke[0]));
         $controller = strtolower(str_replace('Controller', '', $controller->getShortName()));
 
-        // Token dla jarka
-        if (! $this->session->has('user_token')) {
-            $this->session->set('user_token', base_convert(sha1(uniqid(mt_rand(), true)), 16, 36));
-        }
-
         $this->session->set('controller', $controller);
 
         if ($this->context->getToken()) {

@@ -7,12 +7,14 @@ use Web\SocketBundle\Server\Conference\Room;
 use Web\SocketBundle\Server\Message\Message;
 
 /**
- * Class MediaHandler
+ * Class ByeHandler
  * @package Web\SocketBundle\Handler
  */
-class MediaHandler implements HandlerInterface
+class ByeHandler implements HandlerInterface
 {
-
+    /**
+     * {@inheritDoc}
+     */
     public function __construct(){}
 
     /**
@@ -22,8 +24,7 @@ class MediaHandler implements HandlerInterface
      */
     public function handle(Room $room, Connection $connection, Message $message)
     {
-        if ($room->isInitiated()) {
-            $room->initiateConnection($connection);
-        }
+        $room->removeWatcher($connection);
+        $room->notifyLeave($connection);
     }
 } 
