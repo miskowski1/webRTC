@@ -18,7 +18,8 @@ function addCameraStream(stream, name, ID) {
     video.muted = true;
 }
 
-cameras.on('click', 'li', function(){
+cameras.on('click', 'li', function(e){
+    e.preventDefault();
     reattachMediaStream(mainCamera, $(this).children('video').get(0));
 });
 

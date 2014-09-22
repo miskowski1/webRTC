@@ -13,6 +13,7 @@
                     <a data-toggle="tab" role="tab" href="#slide">Slide</a>
                 </li>
             </ul>
+            <a href="#" class="btn btn-primary start-conference" onclick="startConference()">Rozpocznij konferencje</a>
             <div class="tab-content">
                 <div id="video" class="tab-pane fade in active">
                     <video id="main-video" autoplay></video>
@@ -53,7 +54,6 @@
             port: "8080"
         };
     </script>
-    <script type="text/javascript" src="{{ asset('js/video.js') }}"></script>
     <script type="text/javascript" src='{{ asset('js/rtc/adapter.js') }}'></script>
     <script type="text/javascript" src='{{ asset('js/rtc/socket.js') }}'></script>
     <script type="text/javascript" src='{{ asset('js/rtc/preview.js') }}'></script>
