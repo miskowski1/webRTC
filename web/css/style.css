@@ -248,3 +248,24 @@ h6, .h6 {
     right: 0;
     top: 43px;
 }
+
+
+.chat div:not(:last-child) {
+    border-bottom: 1px solid #444;
+}
+
+.chat {
+    height: 300px;
+    max-height: 400px;
+    overflow-y: scroll;
+}
+
+.chat span.username {
+    font-weight: bold;
+    display: block;
+}
+
+.chat span.username.me {
+    text-align: right;
+    color: red;
+}
